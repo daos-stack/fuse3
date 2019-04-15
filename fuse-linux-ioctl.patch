@@ -1,0 +1,123 @@
+From a1bff7dbe3ad8950d8cf1b5640aa7a7b2e89211d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jean-Pierre=20Andr=C3=A9?=
+ <jpandre@users.noreply.github.com>
+Date: Mon, 11 Mar 2019 18:35:23 +0100
+Subject: [PATCH] Defined the (*ioctl)() commands as unsigned int (#381)
+
+Instead of the Posix ioctl(2) command, Linux uses its own variant of ioctl()
+in which the commands are requested as "unsigned long" and truncated to
+32 bits by the fuse kernel module. Transmitting the commands to user space
+file systems as "unsigned int" is a workaround for processing ioctl()
+commands which do not fit into a signed int.
+---
+ ChangeLog.rst           |  4 ++++
+ example/ioctl.c         |  2 +-
+ include/fuse.h          | 10 +++++++---
+ include/fuse_lowlevel.h |  7 +++++--
+ lib/fuse.c              | 13 +++++++------
+ 5 files changed, 24 insertions(+), 12 deletions(-)
+
+diff --git a/ChangeLog.rst b/ChangeLog.rst
+index 74bd0bee..ca043192 100644
+--- a/ChangeLog.rst
++++ b/ChangeLog.rst
+@@ -1,3 +1,7 @@
++* Changed ioctl commands to "unsigned int" in order to support commands
++  which do not fit into a signed int. Commands issued by applications
++  are still truncated to 32 bits.
++
+ libfuse 3.4.2 (2019-03-09)
+ ==========================
+ 
+diff --git a/example/ioctl.c b/example/ioctl.c
+index 75991d75..eab30612 100644
+--- a/example/ioctl.c
++++ b/example/ioctl.c
+@@ -188,7 +188,7 @@ static int fioc_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
+ 	return 0;
+ }
+ 
+-static int fioc_ioctl(const char *path, int cmd, void *arg,
++static int fioc_ioctl(const char *path, unsigned int cmd, void *arg,
+ 		      struct fuse_file_info *fi, unsigned int flags, void *data)
+ {
+ 	(void) arg;
+diff --git a/include/fuse.h b/include/fuse.h
+index 4f7131b6..3e8aa206 100644
+--- a/include/fuse.h
++++ b/include/fuse.h
+@@ -677,8 +677,11 @@ struct fuse_operations {
+ 	 *
+ 	 * If flags has FUSE_IOCTL_DIR then the fuse_file_info refers to a
+ 	 * directory file handle.
++	 *
++	 * Note : the unsigned long request submitted by the application
++	 * is truncated to 32 bits.
+ 	 */
+-	int (*ioctl) (const char *, int cmd, void *arg,
++	int (*ioctl) (const char *, unsigned int cmd, void *arg,
+ 		      struct fuse_file_info *, unsigned int flags, void *data);
+ 
+ 	/**
+@@ -1182,8 +1185,9 @@ int fuse_fs_removexattr(struct fuse_fs *fs, const char *path,
+ 			const char *name);
+ int fuse_fs_bmap(struct fuse_fs *fs, const char *path, size_t blocksize,
+ 		 uint64_t *idx);
+-int fuse_fs_ioctl(struct fuse_fs *fs, const char *path, int cmd, void *arg,
+-		  struct fuse_file_info *fi, unsigned int flags, void *data);
++int fuse_fs_ioctl(struct fuse_fs *fs, const char *path, unsigned int cmd,
++		  void *arg, struct fuse_file_info *fi, unsigned int flags,
++		  void *data);
+ int fuse_fs_poll(struct fuse_fs *fs, const char *path,
+ 		 struct fuse_file_info *fi, struct fuse_pollhandle *ph,
+ 		 unsigned *reventsp);
+diff --git a/include/fuse_lowlevel.h b/include/fuse_lowlevel.h
+index 68fd521f..87c362ac 100644
+--- a/include/fuse_lowlevel.h
++++ b/include/fuse_lowlevel.h
+@@ -1010,9 +1010,12 @@ struct fuse_lowlevel_ops {
+ 	 * @param in_buf data fetched from the caller
+ 	 * @param in_bufsz number of fetched bytes
+ 	 * @param out_bufsz maximum size of output data
++	 *
++	 * Note : the unsigned long request submitted by the application
++	 * is truncated to 32 bits.
+ 	 */
+-	void (*ioctl) (fuse_req_t req, fuse_ino_t ino, int cmd, void *arg,
+-		       struct fuse_file_info *fi, unsigned flags,
++	void (*ioctl) (fuse_req_t req, fuse_ino_t ino, unsigned int cmd,
++		       void *arg, struct fuse_file_info *fi, unsigned flags,
+ 		       const void *in_buf, size_t in_bufsz, size_t out_bufsz);
+ 
+ 	/**
+diff --git a/lib/fuse.c b/lib/fuse.c
+index a40e9959..5c3b55b8 100755
+--- a/lib/fuse.c
++++ b/lib/fuse.c
+@@ -2304,8 +2304,9 @@ int fuse_fs_removexattr(struct fuse_fs *fs, const char *path, const char *name)
+ 	}
+ }
+ 
+-int fuse_fs_ioctl(struct fuse_fs *fs, const char *path, int cmd, void *arg,
+-		  struct fuse_file_info *fi, unsigned int flags, void *data)
++int fuse_fs_ioctl(struct fuse_fs *fs, const char *path, unsigned int cmd,
++		  void *arg, struct fuse_file_info *fi, unsigned int flags,
++		  void *data)
+ {
+ 	fuse_get_context()->private_data = fs->user_data;
+ 	if (fs->op.ioctl) {
+@@ -4222,10 +4223,10 @@ static void fuse_lib_bmap(fuse_req_t req, fuse_ino_t ino, size_t blocksize,
+ 		reply_err(req, err);
+ }
+ 
+-static void fuse_lib_ioctl(fuse_req_t req, fuse_ino_t ino, int cmd, void *arg,
+-			   struct fuse_file_info *llfi, unsigned int flags,
+-			   const void *in_buf, size_t in_bufsz,
+-			   size_t out_bufsz)
++static void fuse_lib_ioctl(fuse_req_t req, fuse_ino_t ino, unsigned int cmd,
++			   void *arg, struct fuse_file_info *llfi,
++			   unsigned int flags, const void *in_buf,
++			   size_t in_bufsz, size_t out_bufsz)
+ {
+ 	struct fuse *f = req_fuse_prepare(req);
+ 	struct fuse_intr_data d;

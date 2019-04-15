@@ -1,5 +1,5 @@
 NAME        := fuse
-VERSION     := 3.3.0
+VERSION     := 3.4.2
 RELEASE     := 1
 DIST        := $(shell rpm --eval %{dist})
 SRPM        := _topdir/SRPMS/$(NAME)-$(VERSION)-$(RELEASE)$(DIST).src.rpm
@@ -12,7 +12,9 @@ SRC_EXT     := gz
 SOURCE      := https://github.com/libfuse/libfuse/archive/$(NAME)-$(VERSION).tar.$(SRC_EXT)
 SOURCES     := _topdir/SOURCES/$(NAME)-$(VERSION).tar.$(SRC_EXT) \
 	       _topdir/SOURCES/$(NAME).conf                      \
-	       _topdir/SOURCES/$(NAME)-install-nonroot.patch
+	       _topdir/SOURCES/$(NAME)-install-nonroot.patch     \
+	       _topdir/SOURCES/$(NAME)-linux-ioctl.patch
+
 TARGETS      := $(RPMS) $(SRPM)
 
 all: $(TARGETS)

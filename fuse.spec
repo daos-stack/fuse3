@@ -1,5 +1,5 @@
 Name:           fuse
-Version:        3.3.0
+Version:        3.4.2
 Release:        1%{?dist}
 Summary:        File System in Userspace (FUSE) utilities
 
@@ -9,7 +9,8 @@ URL:            https://github.com/libfuse/libfuse
 Source0:        https://github.com/libfuse/libfuse/archive/%{name}-%{version}.tar.gz
 Source1:	%{name}.conf
 
-Patch1:		fuse-install-nonroot.patch
+Patch1:		fuse-linux-ioctl.patch
+Patch2:		fuse-install-nonroot.patch
 
 Requires:       which
 Conflicts:      filesystem < 3
@@ -50,6 +51,7 @@ pgk-config) to develop FUSE based applications/filesystems.
 %prep
 %setup -q -n libfuse-%{name}-%{version}
 %patch1 -p1
+%patch2 -p1
 mkdir build
 
 %build
@@ -98,6 +100,10 @@ rm -f %{buildroot}%{_sysconfdir}/udev/rules.d/99-fuse.rules
 %{_includedir}/fuse3
 
 %changelog
+* Mon Apr 15 2019 Brian J. Murrell <brian.murrell@intel.com> - 3.4.2-1
+- Update to 3.4.2
+- Add patch for linux ioctl needed by DAOS
+
 * Thu Apr 04 2019 Brian J. Murrell <brian.murrell@intel.com> - 3.3.0-1
 - Update to 3.3.0
 
