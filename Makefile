@@ -1,21 +1,22 @@
-NAME        := fuse
-VERSION     := 3.4.2
-RELEASE     := 1
-DIST        := $(shell rpm --eval %{dist})
-SRPM        := _topdir/SRPMS/$(NAME)-$(VERSION)-$(RELEASE)$(DIST).src.rpm
-RPMS        := _topdir/RPMS/x86_64/$(NAME)-$(VERSION)-$(RELEASE)$(DIST).x86_64.rpm           \
-	       _topdir/RPMS/x86_64/$(NAME)-libs-$(VERSION)-$(RELEASE)$(DIST).x86_64.rpm     \
-	       _topdir/RPMS/x86_64/$(NAME)-devel-$(VERSION)-$(RELEASE)$(DIST).x86_64.rpm     \
-	       _topdir/RPMS/x86_64/$(NAME)-debuginfo-$(VERSION)-$(RELEASE)$(DIST).x86_64.rpm
-SPEC        := $(NAME).spec
-SRC_EXT     := gz
-SOURCE      := https://github.com/libfuse/libfuse/archive/$(NAME)-$(VERSION).tar.$(SRC_EXT)
-SOURCES     := _topdir/SOURCES/$(NAME)-$(VERSION).tar.$(SRC_EXT) \
-	       _topdir/SOURCES/$(NAME).conf                      \
-	       _topdir/SOURCES/$(NAME)-install-nonroot.patch     \
-	       _topdir/SOURCES/$(NAME)-linux-ioctl.patch
+NAME    := fuse
+SRC_EXT := gz
+SOURCE   = https://github.com/libfuse/libfuse/archive/$(NAME)-$(VERSION).tar.$(SRC_EXT)
+PATCHES := $(NAME).conf $(NAME)-install-nonroot.patch $(NAME)-linux-ioctl.patch
 
-TARGETS      := $(RPMS) $(SRPM)
+COMMON_RPM_ARGS := --define "%_topdir $$PWD/_topdir"
+DIST    := $(shell rpm $(COMMON_RPM_ARGS) --eval %{?dist})
+ifeq ($(DIST),)
+SED_EXPR := 1p
+else
+SED_EXPR := 1s/$(DIST)//p
+endif
+VERSION := $(shell rpm $(COMMON_RPM_ARGS) --specfile --qf '%{version}\n' $(NAME).spec | sed -n '1p')
+RELEASE := $(shell rpm $(COMMON_RPM_ARGS) --specfile --qf '%{release}\n' $(NAME).spec | sed -n '$(SED_EXPR)')
+SRPM    := _topdir/SRPMS/$(NAME)-$(VERSION)-$(RELEASE)$(DIST).src.rpm
+RPMS    := $(addsuffix .rpm,$(addprefix _topdir/RPMS/x86_64/,$(shell rpm --specfile $(NAME).spec)))
+SPEC    := $(NAME).spec
+SOURCES := $(addprefix _topdir/SOURCES/,$(notdir $(SOURCE)) $(PATCHES))
+TARGETS := $(RPMS) $(SRPM)
 
 all: $(TARGETS)
 
@@ -26,17 +27,26 @@ _topdir/SOURCES/%: % | _topdir/SOURCES/
 	rm -f $@
 	ln $< $@
 
+$(NAME)-$(VERSION).tar.$(SRC_EXT).asc:
+	curl -f -L -O '$(SOURCE).asc'
+
 $(NAME)-$(VERSION).tar.$(SRC_EXT):
+	curl -f -L -O '$(SOURCE)'
+
+v$(VERSION).tar.$(SRC_EXT):
+	curl -f -L -O '$(SOURCE)'
+
+$(VERSION).tar.$(SRC_EXT):
 	curl -f -L -O '$(SOURCE)'
 
 # see https://stackoverflow.com/questions/2973445/ for why we subst
 # the "rpm" for "%" to effectively turn this into a multiple matching
 # target pattern rule
 $(subst rpm,%,$(RPMS)): $(SPEC) $(SOURCES)
-	rpmbuild -bb --define "%_topdir $$PWD/_topdir" $(SPEC)
+	rpmbuild -bb $(COMMON_RPM_ARGS) $(SPEC)
 
 $(SRPM): $(SPEC) $(SOURCES)
-	rpmbuild -bs --define "%_topdir $$PWD/_topdir" $(SPEC)
+	rpmbuild -bs $(COMMON_RPM_ARGS) $(SPEC)
 
 srpm: $(SRPM)
 
@@ -53,4 +63,19 @@ mockbuild: $(SRPM) Makefile
 rpmlint: $(SPEC)
 	rpmlint $<
 
-.PHONY: srpm rpms ls mockbuild rpmlint FORCE
+show_version:
+	@echo $(VERSION)
+
+show_release:
+	@echo $(RELEASE)
+
+show_rpms:
+	@echo $(RPMS)
+
+show_source:
+	@echo $(SOURCE)
+
+show_sources:
+	@echo $(SOURCES)
+
+.PHONY: srpm rpms ls mockbuild rpmlint FORCE show_version show_release show_rpms show_source show_sources
