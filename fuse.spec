@@ -1,6 +1,6 @@
 Name:           fuse
 Version:        3.4.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        File System in Userspace (FUSE) utilities
 
 Group:          System Environment/Base
@@ -14,9 +14,17 @@ Patch2:		fuse-install-nonroot.patch
 
 Requires:       which
 Conflicts:      filesystem < 3
+%if 0%{?rhel} >= 7
 BuildRequires:  libselinux-devel
+%endif
 BuildRequires:  meson
+%if 0%{?rhel} >= 7
 BuildRequires:  ninja-build
+%else
+%if 0%{?suse_version} > 01315
+BuildRequires:  ninja
+%endif
+%endif
 
 %description
 With FUSE it is possible to implement a fully functional filesystem in a
@@ -100,6 +108,9 @@ rm -f %{buildroot}%{_sysconfdir}/udev/rules.d/99-fuse.rules
 %{_includedir}/fuse3
 
 %changelog
+* Fri May 03 2019 Brian J. Murrell <brian.murrell@intel.com> - 3.4.2-2
+- Support SLES 12.3
+
 * Mon Apr 15 2019 Brian J. Murrell <brian.murrell@intel.com> - 3.4.2-1
 - Update to 3.4.2
 - Add patch for linux ioctl needed by DAOS
