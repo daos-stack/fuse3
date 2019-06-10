@@ -25,7 +25,9 @@ RUN zypper --non-interactive install make rpm-build curl createrepo git    \
                                      lsb-release autoconf automake libtool \
                                      ca-certificates-mozilla
 # fuse
-RUN zypper --non-interactive ar --gpgcheck-allow-unsigned -f https://build.hpdd.intel.com/job/daos-stack/job/meson/job/master/lastSuccessfulBuild/artifact/artifacts/sles12.3/ meson; \
+ARG JENKINS_URL=""
+RUN zypper --non-interactive ar --gpgcheck-allow-unsigned \
+     -f ${JENKINS_URL}job/daos-stack/job/meson/job/master/lastSuccessfulBuild/artifact/artifacts/sles12.3/ meson; \
     zypper --non-interactive --gpg-auto-import-keys ref meson
 RUN zypper --non-interactive install meson ninja
 
