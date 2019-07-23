@@ -1,0 +1,43 @@
+fuse3 (3.4.2-1) unstable; urgency=medium
+
+  [ John Malmberg ]
+  * Patched Upstream Release
+  * Experimental build for daos-stack project
+
+ -- John Malmberg <john.e.malmberg@intel.com>  Wed, 26 Jun 2019 19:11:00 +0000
+
+fuse3 (3.4.1-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Update library symbols for this release.
+  * Update Standards-Version to 4.3.0 .
+
+  [ Dmitry Smirnov <onlyjob@member.fsf.org> ]
+  * Make "fuse3" to replace "fuse", instead of conflict (closes: #912528).
+
+ -- Laszlo Boszormenyi (GCS) <gcs@debian.org>  Tue, 25 Dec 2018 16:57:44 +0000
+
+fuse3 (3.2.6-1) unstable; urgency=medium
+
+  * New upstream release:
+    - fix CVE-2018-10906, restriction bypass of the allow_other option when
+      SELinux is active (closes: #911343).
+  * Honor nocheck in DEB_BUILD_OPTIONS (closes: #910029).
+  * Don't force xz compression for source and binaries (closes: #910030).
+  * Update copyright file.
+
+ -- Laszlo Boszormenyi (GCS) <gcs@debian.org>  Thu, 18 Oct 2018 21:36:00 +0000
+
+fuse3 (3.2.4-1) unstable; urgency=medium
+
+  * New major upstream release (closes: #904216).
+  * Drop own udev rules.
+  * Update watch file.
+  * Update copyright file.
+  * Update debhelper level to 11:
+    - remove dh-autoreconf build dependency,
+    - don't specify parallel to debhelper.
+  * Update Standards-Version to 4.1.5:
+    - remove fuse-dbg package and use the auto-generated one.
+
+ -- Laszlo Boszormenyi (GCS) <gcs@debian.org>  Sat, 21 Jul 2018 14:11:44 +0000
