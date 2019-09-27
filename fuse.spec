@@ -1,6 +1,6 @@
 Name:           fuse
 Version:        3.4.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        File System in Userspace (FUSE) utilities
 
 Group:          System Environment/Base
@@ -21,10 +21,14 @@ BuildRequires:  meson
 %if 0%{?rhel} >= 7
 BuildRequires:  ninja-build
 %else
-%if 0%{?suse_version} > 01315
+%if 0%{?suse_version} >= 01315
 BuildRequires:  ninja
+BuildRequires:  pkg-config
+BuildRequires:  udev
+BuildRequires:  cmake
 %endif
 %endif
+
 
 %description
 With FUSE it is possible to implement a fully functional filesystem in a
@@ -108,6 +112,9 @@ rm -f %{buildroot}%{_sysconfdir}/udev/rules.d/99-fuse.rules
 %{_includedir}/fuse3
 
 %changelog
+* Tue Oct 01 2019 John E. Malmberg <john.e.malmberg@intel.com> - 3.4.2-3
+- SLES 12.3 needs pkg-config, udev, cmake
+
 * Fri May 03 2019 Brian J. Murrell <brian.murrell@intel.com> - 3.4.2-2
 - Support SLES 12.3
 
