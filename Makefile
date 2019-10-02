@@ -8,5 +8,5 @@ ifneq ($(ID_LIKE),debian)
 PATCHES += $(NAME).conf
 endif
 
-include Makefile_packaging.mk
+include packaging/Makefile_packaging.mk
 
