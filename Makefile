@@ -9,4 +9,3 @@ PATCHES += $(NAME).conf
 endif
 
 include packaging/Makefile_packaging.mk
-

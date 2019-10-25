@@ -7,7 +7,7 @@ Group:          System Environment/Base
 License:        GPL+
 URL:            https://github.com/libfuse/libfuse
 Source0:        https://github.com/libfuse/libfuse/archive/%{name}-%{version}.tar.gz
-Source1:	%{name}.conf
+Source1:	    %{name}.conf
 
 Patch1:		fuse-linux-ioctl.patch
 Patch2:		fuse-install-nonroot.patch
