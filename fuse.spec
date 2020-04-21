@@ -1,117 +1,37 @@
 Name:           fuse
 Version:        3.4.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        File System in Userspace (FUSE) utilities
 
 Group:          System Environment/Base
 License:        GPL+
 URL:            https://github.com/libfuse/libfuse
-Source0:        https://github.com/libfuse/libfuse/archive/%{name}-%{version}.tar.gz
-Source1:	    %{name}.conf
 
-Patch1:		fuse-linux-ioctl.patch
-Patch2:		fuse-install-nonroot.patch
-
-Requires:       which
-Conflicts:      filesystem < 3
-%if 0%{?rhel} >= 7
-BuildRequires:  libselinux-devel
-%endif
-BuildRequires:  meson
-%if 0%{?rhel} >= 7
-BuildRequires:  ninja-build
-%else
-%if 0%{?suse_version} >= 01315
-BuildRequires:  ninja
-BuildRequires:  pkg-config
-BuildRequires:  udev
-BuildRequires:  cmake
-%endif
-%endif
+Requires:       fuse3
 
 
 %description
-With FUSE it is possible to implement a fully functional filesystem in a
-userspace program. This package contains the FUSE userspace tools to
-mount a FUSE filesystem.
+This is just a metapackage to allow for the upgrade to the fuse3
+packaging.
 
 %package libs
 Summary:        File System in Userspace (FUSE) libraries
 Group:          System Environment/Libraries
 License:        LGPLv2+
-Conflicts:      filesystem < 3
+Requires:       fuse3-libs
 
 %description libs
-Devel With FUSE it is possible to implement a fully functional filesystem in a
-userspace program. This package contains the FUSE libraries.
-
-
-%package devel
-Summary:        File System in Userspace (FUSE) devel files
-Group:          Development/Libraries
-Requires:       %{name}-libs = %{version}-%{release}
-Requires:       pkgconfig
-License:        LGPLv2+
-Conflicts:      filesystem < 3
-
-%description devel
-With FUSE it is possible to implement a fully functional filesystem in a
-userspace program. This package contains development files (headers,
-pgk-config) to develop FUSE based applications/filesystems.
-
-
-%prep
-%setup -q -n libfuse-%{name}-%{version}
-%patch1 -p1
-%patch2 -p1
-mkdir build
-
-%build
-cd build
-meson .. --prefix=%{_prefix}   \
-         -D disable-mtab=True
-%{ninja_build}
-
-%install
-cd build
-%{ninja_install}
-# change from 4755 to 0755 to allow stripping -- fixed later in files
-#chmod 0755 %{buildroot}/%{_bindir}/fusermount
-
-# Get rid of static libs
-rm -f %{buildroot}/%{_libdir}/*.a
-# No need to create init-script
-rm -f %{buildroot}%{_sysconfdir}/init.d/fuse3
-
-# Install config-file
-install -p -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}
-
-# Delete pointless udev rules, which do not belong in /etc (brc#748204)
-rm -f %{buildroot}%{_sysconfdir}/udev/rules.d/99-fuse.rules
-
-%post libs -p /sbin/ldconfig
-
-%postun libs -p /sbin/ldconfig
+This is just a metapackage to allow for the upgrade to the fuse3
+packaging.
 
 %files
-%doc AUTHORS ChangeLog.rst LICENSE README.md
-%{_sbindir}/mount.fuse3
-%attr(4755,root,root) %{_bindir}/fusermount3
-%config(noreplace) %{_sysconfdir}/%{name}.conf
-%{_mandir}/man1/*
-%{_mandir}/man8/*
-%_udevrulesdir/99-fuse3.rules
-
 
 %files libs
-%{_libdir}/libfuse3.so.*
-
-%files devel
-%{_libdir}/libfuse3.so
-%{_libdir}/pkgconfig/*.pc
-%{_includedir}/fuse3
 
 %changelog
+* Tue Apr 21 2020 Brian J. Murrell <brian.murrell@intel.com> - 3.4.2-4
+- Switch to metapackage to just require fuse3
+
 * Tue Oct 01 2019 John E. Malmberg <john.e.malmberg@intel.com> - 3.4.2-3
 - SLES 12.3 needs pkg-config, udev, cmake
 
