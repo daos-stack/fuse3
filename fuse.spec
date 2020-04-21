@@ -24,9 +24,21 @@ Requires:       fuse3-libs
 This is just a metapackage to allow for the upgrade to the fuse3
 packaging.
 
+%package devel
+Summary:        File System in Userspace (FUSE) devel files
+Group:          Development/Libraries
+License:        LGPLv2+
+Requires:       fuse3-devel
+
+%description devel
+This is just a metapackage to allow for the upgrade to the fuse3
+packaging.
+
 %files
 
 %files libs
+
+%files devel
 
 %changelog
 * Tue Apr 21 2020 Brian J. Murrell <brian.murrell@intel.com> - 3.4.2-4
