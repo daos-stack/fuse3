@@ -1,0 +1,12 @@
+# This line is mandatory to access the configuration functions
+from Config import *
+
+# these are all in the upstream EL9 specfile as imported here
+addFilter('fuse3.x86_64: E: setuid-binary /usr/bin/fusermount3 root 4755')
+addFilter('fuse3.x86_64: E: non-standard-executable-perm /usr/bin/fusermount3 4755')
+addFilter('fuse3.x86_64: E: missing-call-to-setgroups-before-setuid /usr/sbin/mount.fuse3')
+addFilter('fuse3.spec:71: W: setup-not-quiet')
+addFilter('fuse-common.x86_64: W: no-documentation')
+addFilter('fuse3-devel.x86_64: W: no-documentation')
+addFilter('fuse3.spec:9: W: mixed-use-of-spaces-and-tabs')
+addFilter('fuse-common.x86_64: W: description-shorter-than-summary')
