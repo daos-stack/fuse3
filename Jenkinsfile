@@ -38,6 +38,6 @@
  */
 // To use a test branch (i.e. PR) until it lands to master
 // I.e. for testing library changes
-//@Library(value="pipeline-lib@your_branch") _
+@Library(value="pipeline-lib@bmurrell/run-daos-test") _
 
-packageBuildingPipelineDAOS(['distros' : ['el8']])
+packageBuildingPipelineDAOSTest(['distros' : ['el8']])
