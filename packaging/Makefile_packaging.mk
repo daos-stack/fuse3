@@ -303,6 +303,10 @@ srpm: $(SRPM)
 $(RPMS): $(SRPM) $(CALLING_MAKEFILE)
 
 rpms: $(RPMS)
+ 
+repo: rpms
+	rm -rf _topdir/RPMS/repodata/
+	createrepo _topdir/RPMS/
 
 $(DEBS): $(CALLING_MAKEFILE)
 
