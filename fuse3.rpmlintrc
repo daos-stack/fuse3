@@ -10,3 +10,9 @@ addFilter('fuse-common.x86_64: W: no-documentation')
 addFilter('fuse3-devel.x86_64: W: no-documentation')
 addFilter('fuse3.spec:9: W: mixed-use-of-spaces-and-tabs')
 addFilter('fuse-common.x86_64: W: description-shorter-than-summary')
+
+#  https://github.com/rpm-software-management/rpmlint/issues/895
+addFilter('fuse-common.x86_64: E: useless-provides fuse-common')
+
+# From upstream specfile:
+addFilter('fuse3.spec:75: W: setup-not-quiet')

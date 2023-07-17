@@ -62,6 +62,10 @@ pgk-config) to develop FUSE v3 based applications/filesystems.
 %package -n fuse-common
 Summary:	Common files for File System in Userspace (FUSE) v2 and v3
 License:	GPL+
+# the distro fuse package has a history of Requires exactly fuse-common = $someversion
+# so let this package mimic those
+#Conflicts: fuse < 3
+Provides: fuse-common = 3.3.0
 
 %description -n fuse-common
 Common files for FUSE v2 and FUSE v3.
