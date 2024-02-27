@@ -117,7 +117,7 @@ Common files for FUSE v2 and FUSE v3.
 #	https://github.com/libfuse/libfuse/releases/tag/fuse-3.15.1
 signify -V -m  '%{SOURCE0}' -p '%{SOURCE2}'
 
-%setup -n fuse-%{version}
+%setup -q -n fuse-%{version}
 %patch0 -p1
 %if 0%{?suse_version}
 %patch1 -p1
@@ -253,7 +253,7 @@ rm -rfv %{buildroot}/%{_prefix}/lib/udev %{buildroot}/%{_initddir}
 %endif
 
 %changelog
-* Tue Feb 27 2024 Brian J. Murrell <brian.murrell@intel.com> - 3.16.2-1
+* Tue Feb 27 2024 Brian J. Murrell <brian.murrell@intel.com> - 3.16.1-1
 - Update to 3.16.2
 - Add:
   - fuse-3.17.0-Pass-FUSE_PARALLEL_DIROPS-to-kernel-861.patch
