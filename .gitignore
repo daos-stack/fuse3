@@ -1,3 +1,4 @@
-_topdir/
-*.tar.*
-*.code-workspace
+/_topdir/
+/mock/
+/*.tar.*
+/*.code-workspace
