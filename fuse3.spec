@@ -40,7 +40,9 @@ Requires:	%{_sysconfdir}/fuse.conf
 # For EL8 compatibiity
 Requires:	%{name}-libs = %{version}-%{release}
 # fuse-common 3.4.2-3 had the fuse & fuse3 man pages in it
+%if ! 0%{?el8}
 Conflicts:	fuse-common < 3.4.2-4
+%endif
 
 # The dependency from fuse3 to fuse3-libs is already implicit through
 # the generated library dependency, but unless we force the exact
