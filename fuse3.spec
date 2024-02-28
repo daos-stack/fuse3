@@ -89,7 +89,9 @@ userspace program. This package contains the FUSE v3 libraries.
 
 %package devel
 Summary:	File System in Userspace (FUSE) v3 devel files
+%if ! 0%{?suse_version}
 Requires:	%{name}-libs = %{version}-%{release}
+%endif
 Requires:	pkgconfig
 License:	LGPLv2+
 %if ! 0%{?el6}
