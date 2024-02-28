@@ -37,20 +37,18 @@ BuildRequires:	udev, kernel-devel
 %else
 Requires:	%{_sysconfdir}/fuse.conf
 %endif
-%if ! 0%{?suse_version}
-# For EL8 compatibiity
-Requires:	%{name}-libs = %{version}-%{release}
-%endif
-# fuse-common 3.4.2-3 had the fuse & fuse3 man pages in it
 %if ! 0%{?el8}
+# fuse-common 3.4.2-3 had the fuse & fuse3 man pages in it
 Conflicts:	fuse-common < 3.4.2-4
 %endif
 
+%if ! 0%{?suse_version}
 # The dependency from fuse3 to fuse3-libs is already implicit through
 # the generated library dependency, but unless we force the exact
 # version then we risk mixing different fuse3 & fuse3-libs versions
 # which is not likely to be a well-tested situation upstream.
 Requires:	%{name}-libs = %{version}-%{release}
+%endif
 
 %description
 With FUSE it is possible to implement a fully functional filesystem in a
