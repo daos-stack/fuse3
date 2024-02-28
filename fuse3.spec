@@ -37,8 +37,10 @@ BuildRequires:	udev, kernel-devel
 %else
 Requires:	%{_sysconfdir}/fuse.conf
 %endif
+%if ! 0%{?suse_version}
 # For EL8 compatibiity
 Requires:	%{name}-libs = %{version}-%{release}
+%endif
 # fuse-common 3.4.2-3 had the fuse & fuse3 man pages in it
 %if ! 0%{?el8}
 Conflicts:	fuse-common < 3.4.2-4
