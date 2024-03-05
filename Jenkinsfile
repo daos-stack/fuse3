@@ -1,5 +1,5 @@
 #!/usr/bin/groovy
-/* Copyright (C) 2019-2022 Intel Corporation
+/* Copyright (C) 2019-2024 Intel Corporation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,6 +38,8 @@
  */
 // To use a test branch (i.e. PR) until it lands to master
 // I.e. for testing library changes
-//@Library(value="pipeline-lib@your_branch") _
+@Library(value='pipeline-lib@bmurrell/test-skip-pragma') _
 
-packageBuildingPipelineDAOS(['distros' : ['el8']])
+/* groovylint-disable-next-line CompileStatic */
+packageBuildingPipelineDAOSTest(['distros' : ['el8', 'leap15'],
+                                 'test-tag': 'dfuse'])
