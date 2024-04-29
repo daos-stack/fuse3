@@ -2,11 +2,30 @@
 from Config import *
 
 # these are all in the upstream EL9 specfile as imported here
-addFilter('fuse3.x86_64: E: setuid-binary /usr/bin/fusermount3 root 4755')
-addFilter('fuse3.x86_64: E: non-standard-executable-perm /usr/bin/fusermount3 4755')
-addFilter('fuse3.x86_64: E: missing-call-to-setgroups-before-setuid /usr/sbin/mount.fuse3')
-addFilter('fuse3.spec:71: W: setup-not-quiet')
-addFilter('fuse-common.x86_64: W: no-documentation')
-addFilter('fuse3-devel.x86_64: W: no-documentation')
-addFilter('fuse3.spec:9: W: mixed-use-of-spaces-and-tabs')
-addFilter('fuse-common.x86_64: W: description-shorter-than-summary')
+addFilter('fuse3\.x86_64: E: setuid-binary \/usr\/bin\/fusermount3 root 4755')
+addFilter('fuse3\.x86_64: E: non-standard-executable-perm \/usr\/bin\/fusermount3 4755')
+addFilter('fuse3\.x86_64: E: missing-call-to-setgroups-before-setuid \/usr\/sbin\/mount\.fuse3')
+addFilter('fuse3\.spec:71: W: setup-not-quiet')
+addFilter('fuse-common\.x86_64: W: no-documentation')
+addFilter('fuse3-devel\.x86_64: W: no-documentation')
+addFilter('fuse3\.spec:9: W: mixed-use-of-spaces-and-tabs')
+addFilter('fuse-common\.x86_64: W: description-shorter-than-summary')
+addFilter('fuse3\.x86_64: W: no-manual-page-for-binary mount\.fuse3')
+addFilter('fuse3\.x86_64: W: missing-call-to-setgroups-before-setuid \/usr\/bin\/fusermount3')
+addFilter('fuse-common\.x86_64: E: no-binary')
+
+# Leap 15:
+addFilter('fuse3\.x86_64: E: setuid-binary \/usr\/bin\/fusermount3 root 4750')
+addFilter('fuse3\.x86_64: E: non-standard-executable-perm \/usr\/bin\/fusermount3 4750')
+addFilter('fuse3\.x86_64: E: non-standard-executable-perm \/usr\/bin\/fusermount3 4750')
+addFilter('fuse3-doc\.x86_64: E: no-binary')
+addFilter('fuse3\.x86_64: W: unstripped-binary-or-object \/usr\/bin\/fusermount3')
+addFilter('fuse3\.x86_64: W: unstripped-binary-or-object \/usr\/sbin\/mount\.fuse3')
+addFilter('libfuse3-3\.x86_64: W: unstripped-binary-or-object \/usr\/lib64\/libfuse3\.so\.3\.16\.1')
+addFilter('fuse3\.x86_64: W: position-independent-executable-suggested \/usr\/bin\/fusermount3')
+addFilter('fuse3\.x86_64: W: position-independent-executable-suggested \/usr\/sbin\/mount\.fuse3')
+addFilter('fuse3\.x86_64: W: non-standard-gid \/usr\/bin\/fusermount3 trusted')
+addFilter('fuse3-doc\.x86_64: W: dangling-relative-symlink \/usr\/share\/doc\/packages\/fuse3-doc\/doc\/html\/fast17-vangoor\.pdf doc\/fast17-vangoor\.pdf')
+addFilter('fuse3\.x86_64: W: conffile-without-noreplace-flag \/etc\/fuse3\.conf')
+# https://github.com/rpm-software-management/rpmlint/issues/856
+addFilter(r'fuse3\.x86_64: W: incoherent-version-in-changelog .* \[\'.*\.suse\.lp[0-9]*\', \'.*\.suse\.lp[0-9]*\'\]')
