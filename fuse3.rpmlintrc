@@ -25,7 +25,7 @@ addFilter('libfuse3-3\.x86_64: W: unstripped-binary-or-object \/usr\/lib64\/libf
 addFilter('fuse3\.x86_64: W: position-independent-executable-suggested \/usr\/bin\/fusermount3')
 addFilter('fuse3\.x86_64: W: position-independent-executable-suggested \/usr\/sbin\/mount\.fuse3')
 addFilter('fuse3\.x86_64: W: non-standard-gid \/usr\/bin\/fusermount3 trusted')
-addFilter('fuse3-doc\.x86_64: W: dangling-relative-symlink \/usr\/share\/doc\/packages\/fuse3-doc\/doc\/html\/fast17-vangoor\.pdf doc\/fast17-vangoor\.pdf')
+addFilter('fuse3-doc\.x86_64: W: dangling-relative-symlink \/usr\/share\/doc\/packages\/fuse3-doc\/doc\/html\/(fast17-vangoor\.pdf doc\/fast17-vangoor\.pdf|fuse__config_8h_source.html doc/html/build_2fuse__config_8h_source.html|libfuse__config_8h_source.html doc/html/build_2libfuse__config_8h_source.html|sanitycheckc_8c_source.html doc/html/build_2meson-private_2sanitycheckc_8c_source.html)')
 addFilter('fuse3\.x86_64: W: conffile-without-noreplace-flag \/etc\/fuse3\.conf')
 # https://github.com/rpm-software-management/rpmlint/issues/856
 addFilter(r'fuse3\.x86_64: W: incoherent-version-in-changelog .* \[\'.*\.suse\.lp[0-9]*\', \'.*\.suse\.lp[0-9]*\'\]')
