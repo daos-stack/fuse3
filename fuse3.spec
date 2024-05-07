@@ -118,6 +118,11 @@ pgk-config) to develop FUSE v3 based applications/filesystems.
 %package -n fuse-common
 Summary:	Common files for File System in Userspace (FUSE) v2 and v3
 License:	GPL+
+# the distro fuse package has a history of Requires exactly fuse-common = $someversion
+# so let this package mimic those
+%if 0%{?el8}
+Provides: fuse-common = 3.3.0
+%endif
 
 %description -n fuse-common
 Common files for FUSE v2 and FUSE v3.
@@ -265,7 +270,7 @@ rm -rfv %{buildroot}/%{_prefix}/lib/udev %{buildroot}/%{_initddir}
 
 %changelog
 * Mon May 06 2024 Brian J. Murrell <brian.murrell@intel.com> - 3.16.2-2
-- Remove P: fuse-common = 3.3.0
+- Only P: fuse-common = 3.3.0 on el8
 
 * Mon Apr 22 2024 Brian J. Murrell <brian.murrell@intel.com> - 3.16.2-1
 - Update to 3.16.2
