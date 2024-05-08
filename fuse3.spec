@@ -8,7 +8,7 @@
 
 Name:		fuse3
 Version:	%{xyz_version}
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	File System in Userspace (FUSE) v3 utilities
 License:	GPL+
 URL:		http://fuse.sf.net
@@ -120,8 +120,9 @@ Summary:	Common files for File System in Userspace (FUSE) v2 and v3
 License:	GPL+
 # the distro fuse package has a history of Requires exactly fuse-common = $someversion
 # so let this package mimic those
-#Conflicts: fuse < 3
+%if 0%{?el8}
 Provides: fuse-common = 3.3.0
+%endif
 
 %description -n fuse-common
 Common files for FUSE v2 and FUSE v3.
@@ -268,6 +269,9 @@ rm -rfv %{buildroot}/%{_prefix}/lib/udev %{buildroot}/%{_initddir}
 %endif
 
 %changelog
+* Mon May 06 2024 Brian J. Murrell <brian.murrell@intel.com> - 3.16.2-2
+- Only P: fuse-common = 3.3.0 on el8
+
 * Mon Apr 22 2024 Brian J. Murrell <brian.murrell@intel.com> - 3.16.2-1
 - Update to 3.16.2
 - Add:
