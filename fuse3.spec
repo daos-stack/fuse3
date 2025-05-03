@@ -134,12 +134,12 @@ Common files for FUSE v2 and FUSE v3.
 signify -V -m  '%{SOURCE0}' -p '%{SOURCE2}'
 
 %setup -q -n fuse-%{version}
-%patch0 -p1
+%patch -P 0 -p1
 %if 0%{?suse_version}
-%patch1 -p1
+%patch -P 1 -p1
 %endif
-%patch16 -p1
-%patch17 -p1
+%patch -P 16 -p1
+%patch -P 17 -p1
 
 %build
 export LC_ALL=en_US.UTF-8
