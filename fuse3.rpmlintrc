@@ -14,6 +14,9 @@ addFilter('fuse3\.x86_64: W: no-manual-page-for-binary mount\.fuse3')
 addFilter('fuse3\.x86_64: W: missing-call-to-setgroups-before-setuid \/usr\/bin\/fusermount3')
 addFilter('fuse-common\.x86_64: E: no-binary')
 
+addFilter('fuse3-devel.x86_64: E: spelling-error .* pgk')
+addFilter('fuse3-libs.x86_64: E: spelling-error .* Devel')
+
 # Leap 15:
 addFilter('fuse3\.x86_64: E: setuid-binary \/usr\/bin\/fusermount3 root 4750')
 addFilter('fuse3\.x86_64: E: non-standard-executable-perm \/usr\/bin\/fusermount3 4750')
